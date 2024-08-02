@@ -1,0 +1,60 @@
+﻿@model IEnumerable<MercDevs_ej2.Models.Datosfichatecnica>
+
+@using System.Security.Claims;
+
+@{
+    ViewData["Title"] = "Página de Inicio";
+}
+
+@if (User.Identity!.IsAuthenticated)
+{
+    <div class="text-center">
+        <h1 class="display-4">Bienvenido al sistema Soporte Hardware/Software y S.O</h1>
+    </div>
+
+    <form>
+        <div class="row">
+            <div class="col">
+                <input type="text" class="form-control" placeholder="Nombre" value="@User.Claims.Where(c => c.Type == ClaimTypes.Name).Select(c => c.Value).SingleOrDefault()" disabled>
+            </div>
+            <div class="col">
+                <input type="text" class="form-control" placeholder="Correo" value="@User.Claims.Where(c => c.Type == ClaimTypes.Email).Select(c => c.Value).SingleOrDefault()" disabled>
+            </div>
+        </div>
+    </form>
+
+    <hr />
+
+    <div class="text-center">
+        <h1 class="display-4">Recepción de Equipos en Proceso</h1>
+    </div>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID Ficha</th>
+                <th>@Html.DisplayNameFor(model => model.FechaInicio)</th>
+                <th>@Html.DisplayNameFor(model => model.FechaFinalizacion)</th>
+                <th>@Html.DisplayNameFor(model => model.RecepcionEquipo)</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => item.IdDatosFichaTecnica)</td>
+                    <td>@Html.DisplayFor(modelItem => item.FechaInicio)</td>
+                    <td>@Html.DisplayFor(modelItem => item.FechaFinalizacion)</td>
+                    <td>@Html.DisplayFor(modelItem => item.RecepcionEquipo.MarcaPc)</td>
+                    <td>
+                        <a asp-action="FichaTecnica" asp-route-id="@item.IdDatosFichaTecnica"><button type="button" class="btn btn-warning">Ver Ficha</button></a>
+                        <a asp-action="Edit" asp-route-id="@item.IdDatosFichaTecnica"><button type="button" class="btn btn-outline-primary">Editar</button></a>
+                        <a asp-action="Details" asp-route-id="@item.IdDatosFichaTecnica"><button type="button" class="btn btn-outline-warning">Detalles</button></a>
+                        <a asp-action="Delete" asp-route-id="@item.IdDatosFichaTecnica"><button type="button" class="btn btn-outline-danger">Borrar</button></a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
